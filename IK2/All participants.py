@@ -30,9 +30,6 @@ for folder in subdirectories:
     # yes_nos = info_sheet['Dynamic'].to_list()
 
     try:
-        if folder == 'S6':  # only need because both heading exist
-            trial = info_sheet['Trials'].to_list()
-        else:
             trial = info_sheet['Trials/Events'].to_list()
 
     except KeyError:
@@ -43,7 +40,7 @@ for folder in subdirectories:
     for row in range(0, info_sheet.shape[0]):
         # if yes_nos[row].lower() == 'no':
         #     continue
-        t = trial[row]
+        t = str(trial[row])
         s = sides[row]
         # if row >= len(yes_nos) or yes_nos[row].lower() == 'no':
         #     continue
@@ -71,14 +68,12 @@ pass
 plt.figure(figsize=(10, 6))
 
 for folder in subdirectories:
-     if folder == 'PLB_06':
-      continue
  # Plot mean as a solid line
      if mean_pd[folder]['left'] is not None:
        # plt.plot(mean_pd[folder]['left']['hip_flexion_l'], label=folder, linewidth=2, color='red')
-        plt.plot(mean_pd[folder]['left']['hip_flexion_l'], label=folder, linewidth=2)
+        plt.plot(mean_pd[folder]['left']['hip_flexion_l'], label=folder, linewidth=2, color='red')
      if mean_pd[folder]['right'] is not None:
-        plt.plot(mean_pd[folder]['right']['hip_flexion_r'], label=folder, linewidth=2)
+        plt.plot(mean_pd[folder]['right']['hip_flexion_r'], label=folder, linewidth=2, color='blue')
        #  plt.plot(mean_pd[folder]['right']['hip_flexion_r'], label=folder, linewidth=2, color='blue')
 
 plt.title("Hip Flexion")

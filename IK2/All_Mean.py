@@ -34,14 +34,11 @@ for folder in subdirectories:
     except KeyError:
         trial = info_sheet['Trials'].to_list()
 
-    # if 'yes' in yes_nos:
     for row in range(0, info_sheet.shape[0]):
         # if yes_nos[row].lower() == 'no':
         #     continue
         t = trial[row]
         s = sides[row]
-        # if row >= len(yes_nos) or yes_nos[row].lower() == 'no':
-        #     continue
         target_file = [f for f in file_names if t.lower() in f.lower()]
         if s == 'Left':
             temp[folder]['left'].append(target_file[0])
@@ -62,6 +59,7 @@ for folder in subdirectories:
         return results
     mean_pd[folder]['left'] = mean_data('left')
     mean_pd[folder]['right'] = mean_data('right')
+
 pass
 plt.figure(figsize=(10, 6))
 
@@ -70,16 +68,16 @@ for folder in subdirectories:
      #  continue
  # Plot mean as a solid line
      if mean_pd[folder]['left'] is not None:
-        plt.plot(mean_pd[folder]['left']['subtalar_angle_l'], label=folder, linewidth=2, color='red')
-       # plt.plot(mean_pd[folder]['left']['subtalar_angle_l'], label=folder, linewidth=2)
+       #plt.plot(mean_pd[folder]['left']['hip_rotation_l'], label=folder, linewidth=2, color='red')
+        plt.plot(mean_pd[folder]['left']['ankle_angle_l'], label=folder, linewidth=2)
      if mean_pd[folder]['right'] is not None:
-       # plt.plot(mean_pd[folder]['right']['subtalar_angle_r'], label=folder, linewidth=2)
-         plt.plot(mean_pd[folder]['right']['subtalar_angle_r'], label=folder, linewidth=2, color='blue')
+       # plt.plot(mean_pd[folder]['right']['ankle_angle_r'], label=folder, linewidth=2)
+        plt.plot(mean_pd[folder]['right']['hip_rotation_r'], label=folder, linewidth=2, color='blue')
 
-plt.title("Ankle Inversion/Eversion")
+plt.title("Knee")
 plt.xlabel("Gait Cycle (%)")
 plt.ylabel("Ev(-)/Inv(+) (Deg)")
-#plt.legend()
+plt.legend()
 plt.show()
 
 

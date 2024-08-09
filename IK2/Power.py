@@ -1,70 +1,65 @@
 
+import os
 import pandas as pd
 import numpy as np
-import os
-from yatpkg.util.data import Yatsdo, StorageIO
-data_directory_IK = "C:\\Users\\schb998\\MyData\\TestAnklePower\\"
-data_directory_ID = "C:\\Users\\schb998\\MyData\\MyData\\PLB_02\\ID_normalisedData\\"
+import re
+import math
+import matplotlib.pyplot as plt
 
-# Initialize an empty list to store joint angles
-joint_angles = []
+data_path = './C:/Users/schb998/OneDrive - The University of Auckland/Desktop/Data and Code/'
 
-# Loop through mot files in the directory
-for filename in os.listdir(data_directory_IK):
-    if filename.endswith(".mot"):
-        filepath = os.path.join(data_directory_IK, filename)
-        df = pd.read_mot(filepath)
-        # change
-        joint_angles = df["ankle_angle_r"].tolist()
-        joint_angles.extend(joint_angles)
+info_data_path = data_path + 'InfoSheet/' + 'Trials_PLB_02.csv'
+info_data = pd.read_csv(info_data_path).values
 
-# Convert angles to radians
-radian_angles = [np.radians(angle) for angle in joint_angles]
+valid_data = []
+for row in info_data:
+    if row[4] == 'No':
+        continue
+    else:
+        valid_data.append(row)
+    #moments.append(pd.read_csv(data_path + 'PLB_02_ID/' + row[0] + '.csv'))
+    #print(row)
 
-# Initialize an empty list to store angular velocities
-angular_velocities = []
+def matches(method_name, column_names, gaitcycle):
+    if method_name == 'moments':
+        if str(gaitcycle) == 'Right':
+            pattern = r"_r_"
+        else:
+            pattern = r"_l_"
 
-# Loop through each data point (except the first one)
-for i in range(1, len(df)):
-    # Calculate time difference
-    delta_t = df['time'].iloc[i] - df['time'].iloc[i - 1]
+        ## read gaitcycle valid data for moments
+        results = ['pelvis_tilt_moment', 'pelvis_list_moment', 'pelvis_rotation_moment']
 
-    # Calculate joint angle difference
-    delta_theta = df['joint_angle'].iloc[i] - df['joint_angle'].iloc[i - 1]
+        regex = re.compile(pattern)
+        for index, string in enumerate(column_names):
+            # Search for the pattern in each string
+            match = regex.search(string)
+            # print(string)
+            # print(match)
+            if match:
+                # results.append((index, match.group()))
+                results.append(column_names[index])
 
-    # Compute angular velocity
-    angular_velocity_i = delta_theta / delta_t
-
-    # Append to the list
-    angular_velocities.append(angular_velocity_i)
-
-# Add the angular velocities back to the DataFrame
-df['angular_velocity'] = [np.nan] + angular_velocities
-
-# Optionally, plot the angular velocity
-plt.plot(df['time'], df['angular_velocity'], label='Angular Velocity')
-plt.xlabel('Time')
-plt.ylabel('Angular Velocity (rad/s)')
-plt.title('Angular Velocity vs. Time')
-plt.legend()
-plt.show()
+    # print(results)
+    return results
 
 
+## read gaitcycle valid data
 
+valid_moments_data = []
 
+for idx, row in enumerate(valid_data):
+    gaitcycle = row[-1]
+    moments_data = pd.read_csv(data_path + 'PLB_02_ID/' + row[0] + '.csv')
+    columns = moments_data.columns
 
+    valid_gaitcycle_columns = matches('moments', columns, gaitcycle)
+    valid_filtered_data = moments_data[valid_gaitcycle_columns]
+    valid_moments_data.append(valid_filtered_data)
 
-
-
-
-
-
-
-
-
-
-
-
+pass
+plt.figure(figsize=(10, 6))
+plt.plot(valid_moments_data)
 
 
 

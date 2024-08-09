@@ -4,7 +4,7 @@ import os
 from yatpkg.util.data import StorageIO, StorageType, Yatsdo
 import matplotlib.pyplot as plt
 
-def normalize_data(data_path, output_dir, weight=35):
+def normalize_data(data_path, output_dir, weight=32.5):
 
     """
     Normalize data from 0 to 100 and save as .csv files.
@@ -18,7 +18,7 @@ def normalize_data(data_path, output_dir, weight=35):
     """
    # print("hello world")
     try:
-        weght = 40
+
         # Loop through each file in the data directory
         for file_name in os.listdir(data_path):
             if file_name.endswith(".mot"):  # Check if file is a csv file
@@ -51,13 +51,9 @@ def normalize_data(data_path, output_dir, weight=35):
                 if not os.path.exists(output_dir):
                     os.makedirs(output_dir)
                 # Save normalized data as CSV
-                output_file_name = os.path.splitext(file_name)[0] + "_normalized.csv"
+                output_file_name = os.path.splitext(file_name)[0] + ".csv"
                 output_file_path = os.path.join(output_dir, output_file_name)
                 ret.to_csv(output_file_path, index=False)
-                # plt.figure(figsize=(10, 6))
-                # plt.figure()
-                # plt.plot(output_file_name)
-                # plt.show()
 
 
                 print("Normalized data saved as {0}".format(output_file_path))
@@ -69,14 +65,14 @@ if __name__ == '__main__':
 
     print()
 
-    data_path = "C:\\Users\\schb998\\MyData\\MyData\\S7\\ID_Results\\"
-    output_dir = "C:\\Users\\schb998\\MyData\\TEST\\"
-    participant_weight = 35
+    data_path = "C:\\Users\\schb998\\MyData\\MyData\\S2\\ID_Results\\"
+    output_dir = "C:\\Users\\schb998\\MyData\\MyData\\All_ID_Normalised_Weight\\S2\\"
+    participant_weight = 32.5
 
     print("We are the main")
     normalize_data(data_path, output_dir, weight=participant_weight)
 
 
-apples = normalize_data(data_path, output_dir, weight=participant_weight)
+apples = normalize_data(data_path, output_dir)
 
 
